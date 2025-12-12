@@ -3,17 +3,16 @@
 {% block content %}
 
 <!-- featured posts-->
- <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">Category -{{category}} </h3>
+ <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">search results for -{{keyword}} </h3>
   <div class="row mb-2">
-    {% if posts %}
-    {% for post in posts %}
+    {% if blogs %}
+    {% for post in blogs %}
     
     <div class="col-md-6">
       <div class="card border-0" >
         <div class="card-body">
           <h3><a href="{% url 'blogs' post.slug %}" class='text-dark'>{{post.title}}</a></h3>
           <small class="mb-1 text-muted">{{post.created_at | timesince}} ago | {{post.author}}</small>
-          <figure class="mb-4"><img class="img-fluid rounded" src="{{post.featured_image.url}}" alt="..." /></figure>
           <p class="card-text">{{post.short_description | truncatewords:25}}</p>
         </div>
       </div>
