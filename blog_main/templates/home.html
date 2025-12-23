@@ -1,95 +1,120 @@
+{% extends 'base.html' %}
 
- {% extends "base.html" %}
- {% block content %}
+  {% block content %}    
+
+  {% for post in featured_posts %}
+    {% if forloop.first %}
     
-{% for post in featured %}
-{% if forloop.first %}
-<div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="background-image: url({{post.featured_image.url}});background-blend-mode: overlay;background-size:cover;">
-    <div class="col-md-8 px-0">
-      <h1 class="display-4 font-italic">{{post.title}}</h1>
-      <p class="lead my-3">{{post.short_description | truncatewords:5}}</p>
-      <p class="lead mb-0"><a href="{% url 'blogs' post.slug %}" class="text-white font-weight-bold">Continue reading...</a></p>
+
+    <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark" style="background-image: url({{ post.featured_image.url }});
+    background-blend-mode: overlay;background-size:cover;">
+      <div class="col-md-8 px-0">
+        <h1 class="display-4 font-italic">{{ post.title }}</h1>
+        <p class="lead my-3">{{ post.short_description | truncatewords:25 }}</p>
+        <p class="lead mb-0"><a href="{% url 'blogs' post.slug  %}" class="text-white font-weight-bold">Continue reading...</a></p>
+      </div>
     </div>
-  </div>
-{% endif %}
-{% endfor %}
-<!-- featured posts-->
- <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">Featured posts</h3>
+    {% endif %}
+  {% endfor %}
+
+  <!-- Featured Posts -->
+  <h3 class="text-uppercase text-primary" style="letter-spacing: 2px;">Featured Posts</h3>
   <div class="row mb-2">
-    {% for post in featured %}
-    {% if not forloop.first %}
+    {% for post in featured_posts %}
+      {% if not forloop.first %}
     <div class="col-md-6">
       <div class="card border-0" >
         <div class="card-body">
-          <h3><a href="{% url 'blogs' post.slug %}" class="text-dark" >{{post.title}}</a></h3>
-          <small class="mb-1 text-muted">{{post.created_at | timesince}} ago | {{post.author}}</small>
-          <figure class="mb-4">
+          <h3><a href="{% url 'blogs' post.slug  %}" class="text-dark">{{ post.title }}</a></h3>
+          <small class="mb-1 text-muted">{{ post.created_at | timesince }} ago | {{ post.author }}</small>
+           <figure class="mb-4">
+      <a href="{% url 'blogs' post.slug %}">
+
     <img 
         class="img-fluid rounded" 
         src="{{ post.featured_image.url }}" 
         alt="..."
-        style="width: 500px; height: 300px; object-fit: cover;"
-    />
+        style="width: 400px; height: 240px; object-fit: cover;"
+    /></a>
 </figure>
-
-          <p class="card-text">{{post.short_description | truncatewords:25}}</p>
+          <p class="card-text">{{ post.short_description | truncatewords:25 }}</p>
+          
         </div>
       </div>
     </div>
-    {% endif %}
+      {% endif %}
     {% endfor %}
+    
   </div>
- <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">Recent Article</h3>
 
-  <main role="main" class="container p-0">
-   <div class="row">
-  <div class="col-md-12 blog-main">
-    <div class="row">
-      {% for post in posts %}
-        <div class="col-md-6 mb-4">   <!-- 2 cards per row (best fit for 500px width) -->
-          <div class="card border-0">
-            <div class="card-body">
 
-              <h3>
-                <a href="{% url 'blogs' post.slug %}" class="text-dark">
-                  {{ post.title }}
-                </a>
-              </h3>
+  <!-- Recent Articles -->
+  <h3 class="text-uppercase text-primary" style="letter-spacing: 2px;">
+  Recent Articles
+</h3>
 
-              <small class="mb-1 text-muted">
-                {{ post.created_at|timesince }} ago | {{ post.author }}
-              </small>
+<div class="row mb-2">
+  {% for post in posts %}
+  <div class="col-lg-4 col-md-6 mb-4">
+    <div class="card border-0 h-100">
 
-              <figure class="mb-4">
-                <img 
-                  src="{{ post.featured_image.url }}"
-                  alt="..."
-                  style="width: 500px; height: 300px; object-fit: cover; border-radius: 8px;"
-                />
-              </figure>
+      {% if post.featured_image %}
+      <a href="{% url 'blogs' post.slug %}">
 
-              <p class="card-text">
-                {{ post.short_description|truncatewords:25 }}
-              </p>
+      <img 
+        src="{{ post.featured_image.url }}"
+        class="img-fluid rounded"
+        alt="..."
+        style="width:100%; height:220px; object-fit:cover;"
+      ></a>
+      {% endif %}
 
-            </div>
-          </div>
-        </div>
-      {% endfor %}
+      <div class="card-body px-0">
+        <h5>
+          <a href="{% url 'blogs' post.slug %}" class="text-dark">
+            {{ post.title }}
+          </a>
+        </h5>
+
+        <small class="text-muted">
+          {{ post.created_at|timesince }} ago | {{ post.author }}
+        </small>
+
+        <p class="card-text mt-2">
+          {{ post.short_description|truncatewords:18 }}
+        </p>
+      </div>
+
     </div>
   </div>
+  {% endfor %}
 </div>
 
 
       <!-- /.blog-main -->
 
-     <aside class="col-md-4 blog-sidebar"> 
-      <div class="p-3 mb-3 bg-light rounded">
-         <h4 class="font-italic">{{about.about_title}}</h4> 
-         <p class="mb-0">{{about.about_description}}.</p> 
-        </div> <div class="p-3"> <h4 class="font-italic">Follow Us</h4> 
+      <aside class="col-md-4 blog-sidebar">
+        <div class="p-3 mb-3 bg-light rounded">
+          <h4 class="font-italic">{{ about.about_heading }}</h4>
+          <p class="mb-0">{{ about.about_description }}</p>
+        </div>
+
+        {% if social_links %}
+        <div class="p-3">
+          <h4 class="font-italic">Follow Us</h4>
           <ol class="list-unstyled">
-             {% for i in sociallinks %} <li><a href="{{i.link}}" target="_blank">{{i.platform}}</a></li> {% endfor %} </ol> </div>
-             </aside><!-- /.blog-sidebar --> </div><!-- /.row --> </main><!-- /.container --> </div>
+            {% for i in social_links %}
+            <li><a href="{{ i.link }}" target="_blank">{{ i.platform }}</a></li>
+            {% endfor %}
+          </ol>
+        </div>
+        {% endif %}
+      </aside><!-- /.blog-sidebar -->
+
+    </div><!-- /.row -->
+
+  </main><!-- /.container -->
+
+</div>
 
 {% endblock %}
