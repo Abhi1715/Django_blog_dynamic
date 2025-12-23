@@ -13,6 +13,14 @@
         <div class="card-body">
           <h3><a href="{% url 'blogs' post.slug  %}" class="text-dark">{{ post.title }}</a></h3>
           <small class="mb-1 text-muted">{{ post.created_at | timesince }} ago | {{ post.author }}</small>
+          <a href="{% url 'blogs' post.slug %}">
+
+      <img 
+        src="{{ post.featured_image.url }}"
+        class="img-fluid rounded"
+        alt="..."
+        style="width:100%; height:220px; object-fit:cover;"
+      ></a>
           <p class="card-text">{{ post.short_description | truncatewords:25 }}</p>
         </div>
       </div>
